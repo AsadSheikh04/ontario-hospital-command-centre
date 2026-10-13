@@ -25,12 +25,25 @@ st.write(
 # Load our cleaned Ontario Health dataset
 df = pd.read_csv("ontario_ed_dashboard_data.csv")
 
-# Show a performance metric
-latest_wait = df["Average_Wait_Hours"].iloc[-1]
 
+# Interactive reporting month selector
+selected_month = st.selectbox(
+    "Select a reporting month",
+    df["Month_Label"].tolist(),
+    index=len(df) - 1
+)
+
+# Find the waiting time for the selected month
+selected_row = df[
+    df["Month_Label"] == selected_month
+].iloc[0]
+
+selected_wait = selected_row["Average_Wait_Hours"]
+
+# Display the selected month's performance
 st.metric(
-    label="Latest Provincial Average Wait",
-    value=f"{latest_wait:.1f} hours"
+    label=f"Provincial Average Wait — {selected_month}",
+    value=f"{selected_wait:.1f} hours"
 )
 
 # Display the historical trend
