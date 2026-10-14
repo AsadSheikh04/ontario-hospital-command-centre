@@ -229,3 +229,65 @@ st.caption(
     "hospital size, or service complexity."
 )
 
+
+# Step 1.35: Hospital vs provincial benchmark
+
+st.subheader("Hospital vs Ontario Benchmark")
+
+# Let visitors choose one hospital
+selected_hospital = st.selectbox(
+    "Choose a hospital for comparison",
+    options=hospital_sites["Hospital"].tolist()
+)
+
+# Find the selected hospital's waiting time
+hospital_wait = hospital_sites.loc[
+    hospital_sites["Hospital"] == selected_hospital,
+    "Average_Wait_Hours"
+].iloc[0]
+
+# Calculate the difference in minutes
+difference_minutes = (
+    hospital_wait - provincial_average
+) * 60
+
+# Display two KPI cards
+col1, col2 = st.columns(2)
+
+with col1:
+    st.metric(
+        label="Selected Hospital Average",
+        value=f"{hospital_wait:.1f} hours"
+    )
+
+with col2:
+    st.metric(
+        label="Difference from Ontario Average",
+        value=f"{difference_minutes:+.0f} minutes",
+        delta="Compared with provincial average",
+        delta_color="off"
+    )
+
+# Explain the result
+if difference_minutes > 0:
+    comparison_text = "longer than"
+elif difference_minutes < 0:
+    comparison_text = "shorter than"
+else:
+    comparison_text = "equal to"
+
+st.info(
+    f"In August 2026, {selected_hospital} reported "
+    f"an average wait of {hospital_wait:.1f} hours. "
+    f"This was {abs(difference_minutes):.0f} minutes "
+    f"{comparison_text} the Ontario provincial "
+    f"average of {provincial_average:.1f} hours."
+)
+
+st.caption(
+    "Descriptive comparison of published averages only. "
+    "Differences are not risk-adjusted and do not "
+    "establish hospital quality or management effectiveness."
+)
+
+
