@@ -343,8 +343,18 @@ st.info(
     "official Ontario Health performance data."
 )
 
-# Assumed daily patient arrivals
-daily_arrivals = 120
+
+# Step 1.38: Interactive patient demand
+
+# Allow users to simulate different daily arrival volumes
+daily_arrivals = st.slider(
+    "Daily patient arrivals",
+    min_value=80,
+    max_value=200,
+    value=120,
+    step=5
+)
+
 
 # Interactive slider for hospital service capacity
 daily_capacity = st.slider(
