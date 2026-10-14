@@ -429,3 +429,51 @@ st.caption(
     "clinical complexity, or actual waiting times."
 )
 
+
+# Step 1.40: Seven-Day Hospital Backlog Simulator
+
+st.subheader("7-Day Capacity Scenario")
+
+# Start with zero unresolved visits
+backlog = 0
+
+# Create a list to store daily results
+backlog_data = []
+
+# Simulate seven days
+for day in range(1, 8):
+
+    # Calculate unresolved visits carried forward
+    backlog = max(
+        0,
+        backlog + daily_arrivals - daily_capacity
+    )
+
+    # Store the result for this day
+    backlog_data.append({
+        "Day": day,
+        "Unresolved_Visits": backlog
+    })
+
+# Convert results into a DataFrame
+backlog_df = pd.DataFrame(backlog_data)
+
+# Display the final backlog KPI
+st.metric(
+    label="Projected Unresolved Visits After 7 Days",
+    value=backlog
+)
+
+# Display the backlog trend chart
+st.line_chart(
+    backlog_df.set_index("Day")["Unresolved_Visits"]
+)
+
+# Explain the model's limitations
+st.caption(
+    "Hypothetical seven-day scenario starting with zero "
+    "unresolved visits. Assumes constant daily arrivals "
+    "and completion capacity, with unfinished visits "
+    "carried forward. This does not predict actual "
+    "emergency department crowding or waiting times."
+)
