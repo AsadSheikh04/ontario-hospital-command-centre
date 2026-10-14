@@ -329,3 +329,66 @@ st.caption(
     "Comparisons are unadjusted and should not be used "
     "alone to rank hospital performance."
 )
+
+
+# Step 1.37: Hospital capacity planning simulator
+
+st.divider()
+
+st.header("🏥 Hospital Capacity Planning Simulator")
+
+st.info(
+    "This is a hypothetical management scenario using "
+    "fictional numbers. It is separate from the "
+    "official Ontario Health performance data."
+)
+
+# Assumed daily patient arrivals
+daily_arrivals = 120
+
+# Interactive slider for hospital service capacity
+daily_capacity = st.slider(
+    "Daily visit completion capacity",
+    min_value=80,
+    max_value=160,
+    value=110,
+    step=5
+)
+
+# Calculate potential daily shortfall
+daily_shortfall = max(0, daily_arrivals - daily_capacity)
+
+# Display management KPIs
+col1, col2 = st.columns(2)
+
+with col1:
+    st.metric(
+        label="Assumed Daily Arrivals",
+        value=daily_arrivals
+    )
+
+with col2:
+    st.metric(
+        label="Potential Daily Shortfall",
+        value=daily_shortfall
+    )
+
+# Display scenario interpretation
+if daily_shortfall > 0:
+    st.warning(
+        f"Daily demand exceeds completion capacity "
+        f"by {daily_shortfall} visits in this scenario."
+    )
+else:
+    st.success(
+        "Daily capacity is sufficient for new arrivals "
+        "in this simplified scenario."
+    )
+
+st.caption(
+    "Illustrative capacity model only. Assumes daily "
+    "arrivals and completion capacity are comparable. "
+    "Does not model existing patients, within-day queues, "
+    "clinical complexity, or actual waiting times."
+)
+
