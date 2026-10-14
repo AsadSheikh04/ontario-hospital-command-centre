@@ -40,11 +40,40 @@ selected_row = df[
 
 selected_wait = selected_row["Average_Wait_Hours"]
 
-# Display the selected month's performance
-st.metric(
-    label=f"Provincial Average Wait — {selected_month}",
-    value=f"{selected_wait:.1f} hours"
-)
+
+# Step 1.30: Compare waiting times with the previous month
+
+# Find the selected month's position
+month_list = df["Month_Label"].tolist()
+selected_index = month_list.index(selected_month)
+
+# Check if a previous month exists
+if selected_index > 0:
+
+    # Get the previous month's waiting time
+    previous_wait = df.iloc[
+        selected_index - 1
+    ]["Average_Wait_Hours"]
+
+    # Calculate the difference
+    monthly_change = selected_wait - previous_wait
+
+    # Display waiting time and change
+    st.metric(
+        label=f"Provincial Average Wait — {selected_month}",
+        value=f"{selected_wait:.1f} hours",
+        delta=f"{monthly_change:+.1f} hours vs previous month",
+        delta_color="inverse"
+    )
+
+else:
+    # First month has no previous month to compare
+    st.metric(
+        label=f"Provincial Average Wait — {selected_month}",
+        value=f"{selected_wait:.1f} hours"
+    )
+
+    st.caption("No previous month available for comparison.")
 
 # Display the historical trend
 st.subheader("Emergency Department Wait-Time Trends")
