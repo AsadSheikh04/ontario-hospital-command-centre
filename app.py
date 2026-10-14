@@ -111,6 +111,40 @@ st.caption(
 )
 
 
+# Step 1.32: Automated management performance insight
+
+# Compare the selected month with the historical average
+difference_hours = selected_wait - historical_average
+
+# Convert the difference into minutes
+difference_minutes = abs(difference_hours * 60)
+
+# Describe the direction of the difference
+if difference_hours > 0:
+    comparison = "above"
+elif difference_hours < 0:
+    comparison = "below"
+else:
+    comparison = "equal to"
+
+# Display an automated summary
+st.subheader("Management Performance Insight")
+
+st.info(
+    f"In {selected_month}, the provincial average wait "
+    f"for first doctor assessment was {selected_wait:.1f} hours. "
+    f"This was {difference_minutes:.0f} minutes {comparison} "
+    f"the 13-month reference average of "
+    f"{historical_average:.2f} hours."
+)
+
+st.caption(
+    "This descriptive comparison does not establish "
+    "the causes of waiting-time changes or indicate "
+    "whether an official performance target was met."
+)
+
+
 # Display the historical trend
 st.subheader("Emergency Department Wait-Time Trends")
 
