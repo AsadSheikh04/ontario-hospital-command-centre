@@ -75,6 +75,42 @@ else:
 
     st.caption("No previous month available for comparison.")
 
+
+# Step 1.31: Historical performance summary
+
+# Calculate the mean of the monthly averages
+historical_average = df["Average_Wait_Hours"].mean()
+
+# Find the lowest and highest monthly values
+historical_min = df["Average_Wait_Hours"].min()
+historical_max = df["Average_Wait_Hours"].max()
+
+# Add a section heading
+st.subheader("Historical Performance Summary")
+
+# Create two side-by-side KPI cards
+col1, col2 = st.columns(2)
+
+with col1:
+    st.metric(
+        label="13-Month Average",
+        value=f"{historical_average:.2f} hours"
+    )
+
+with col2:
+    st.metric(
+        label="13-Month Range",
+        value=f"{historical_min:.1f}–{historical_max:.1f} hours"
+    )
+
+st.caption(
+    "Historical reference: August 2025–August 2026. "
+    "The 13-month average is an unweighted mean of "
+    "published provincial monthly averages, not a "
+    "patient-weighted average or performance target."
+)
+
+
 # Display the historical trend
 st.subheader("Emergency Department Wait-Time Trends")
 
