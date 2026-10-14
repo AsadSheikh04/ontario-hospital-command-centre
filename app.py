@@ -291,3 +291,41 @@ st.caption(
 )
 
 
+
+# Step 1.36: Downloadable hospital benchmark report
+
+st.subheader("Download Hospital Performance Report")
+
+# Prepare a report containing all six hospital sites
+comparison_report = hospital_sites[
+    ["Hospital", "Average_Wait_Hours", "Reporting_Month"]
+].copy()
+
+# Add the Ontario provincial reference
+comparison_report["Ontario_Average_Hours"] = provincial_average
+
+# Calculate each hospital's difference in minutes
+comparison_report["Difference_Minutes"] = (
+    (comparison_report["Average_Wait_Hours"] -
+     comparison_report["Ontario_Average_Hours"]) * 60
+).round().astype(int)
+
+# Convert the report into downloadable CSV data
+csv_report = comparison_report.to_csv(
+    index=False
+).encode("utf-8-sig")
+
+# Create the download button
+st.download_button(
+    label="📥 Download Hospital Comparison Report",
+    data=csv_report,
+    file_name="ontario_hospital_benchmark_report.csv",
+    mime="text/csv"
+)
+
+st.caption(
+    "Report contains six selected hospital sites for "
+    "August 2026. Source: Ontario Health / CIHI NACRS. "
+    "Comparisons are unadjusted and should not be used "
+    "alone to rank hospital performance."
+)
