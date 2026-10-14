@@ -368,6 +368,33 @@ daily_capacity = st.slider(
 # Calculate potential daily shortfall
 daily_shortfall = max(0, daily_arrivals - daily_capacity)
 
+
+# Step 1.39: Demand-to-capacity KPI
+
+# Calculate demand as a percentage of capacity
+demand_capacity_ratio = (
+    daily_arrivals / daily_capacity
+) * 100
+
+# Display the new KPI
+st.metric(
+    label="Demand-to-Capacity Ratio",
+    value=f"{demand_capacity_ratio:.1f}%"
+)
+
+# Explain the operational scenario
+if demand_capacity_ratio > 100:
+    st.warning(
+        "Assumed daily arrivals exceed the modeled "
+        "daily visit completion capacity."
+    )
+else:
+    st.success(
+        "Modeled daily completion capacity is sufficient "
+        "for the assumed daily arrivals."
+    )
+
+
 # Display management KPIs
 col1, col2 = st.columns(2)
 
