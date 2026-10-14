@@ -161,3 +161,71 @@ st.caption(
     "Provincial monthly averages for first assessment "
     "by a doctor. Historical data, not live wait times."
 )
+
+
+
+# Step 1.34: Interactive hospital comparison
+
+st.divider()
+
+st.header("🏥 Hospital Performance Comparison")
+
+st.write(
+    "Compare average emergency department waiting times "
+    "across selected Ontario hospital sites for August 2026."
+)
+
+# Load our hospital-level dataset
+hospital_comparison = pd.read_csv(
+    "ontario_hospital_comparison_aug2026.csv"
+)
+
+# Separate the Ontario benchmark from hospital sites
+provincial_average = hospital_comparison.loc[
+    hospital_comparison["Hospital"] == "Ontario (Provincial)",
+    "Average_Wait_Hours"
+].iloc[0]
+
+hospital_sites = hospital_comparison[
+    hospital_comparison["Hospital"] != "Ontario (Provincial)"
+].copy()
+
+# Allow visitors to choose hospitals
+selected_hospitals = st.multiselect(
+    "Select hospitals to compare",
+    options=hospital_sites["Hospital"].tolist(),
+    default=hospital_sites["Hospital"].tolist()
+)
+
+# Filter the data to selected hospitals
+filtered_hospitals = hospital_sites[
+    hospital_sites["Hospital"].isin(selected_hospitals)
+]
+
+# Display our interactive chart
+if not filtered_hospitals.empty:
+
+    st.bar_chart(
+        filtered_hospitals.set_index("Hospital")[
+            "Average_Wait_Hours"
+        ],
+        horizontal=True
+    )
+
+else:
+    st.warning("Please select at least one hospital.")
+
+# Display the provincial reference
+st.metric(
+    "Ontario Provincial Average (August 2026)",
+    f"{provincial_average:.1f} hours"
+)
+
+st.caption(
+    "Source: Ontario Health / CIHI NACRS, August 2026. "
+    "Indicator: average time to first assessment by a doctor. "
+    "Hospital comparisons are descriptive and are not "
+    "adjusted for patient characteristics, urgency, "
+    "hospital size, or service complexity."
+)
+
